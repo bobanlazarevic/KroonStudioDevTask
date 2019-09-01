@@ -1,3 +1,5 @@
 flask
 Flask-SQLAlchemy
 Flask-Script
+Flask-Migrate
+Flask-JWT
