@@ -1,9 +1,10 @@
 from sqlalchemy import and_
 from datetime import datetime
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, url_for, flash, redirect, request, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from blog.forms import LoginForm, RegistrationForm
 from blog.models import User, Category, Article
 from blog import app, db
 
@@ -38,59 +39,59 @@ ERROR_MESSAGE = {
 def dummy():
     return jsonify( ERROR_MESSAGE['DummyLogin'] )
 
-@app.route('/register', methods = ['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register_user():
-    if current_user.is_active():
-        pass
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
 
-    data = request.get_json()
+    form = RegistrationForm()
 
-    user = User.query.filter_by(email = data['email']).first()
-    if user:
-        return jsonify( ERROR_MESSAGE['IncorrectEmail'] )
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            hashed_password = generate_password_hash(form.password.data, method = 'pbkdf2:sha256')
+        
+            new_user = User(
+                email = form.email.data,
+                first_name = form.first_name.data,
+                last_name = form.last_name.data,
+                password = hashed_password
+            )
+            db.session.add(new_user)
+            db.session.commit()
 
-    if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", data['password']):
-        return jsonify( ERROR_MESSAGE['IncorrectPassword'] )
+            return redirect(url_for('login'))
+        else:
+            return redirect(url_for('register_user')) 
 
-    hashed_password = generate_password_hash(data['password'], method='pbkdf2:sha256')
+    return render_template('register.html', title = 'Sign up', form = form)
 
-    new_user = User(
-        email = data['email'],
-        first_name = data['first_name'],
-        last_name = data['last_name'],
-        password = hashed_password
-    )
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify( SUCCESS_MESSAGE['NewUser'] )
-
-# This is just for testing purposes
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user and current_user.is_active():
-        pass
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
 
-    data = request.get_json()
+    form = LoginForm()
 
-    email = data['Username']
-    password = data['Password']
+    if request.method == 'POST':
+        user = User.query.filter_by(email = form.email.data).first()
+        if user: # form.validate() and user and check_password_hash(user.password, form.password.data):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('login')) 
 
-    user = User.query.filter_by(email = email).first()
+    return render_template('login.html', title = 'Login', form = form)
 
-    if not user or not check_password_hash(user.password, password):
-        return jsonify( ERROR_MESSAGE['Unauthorized'] )
-
-    login_user(user)
-    
-    return jsonify( SUCCESS_MESSAGE['LoggedIn'] )
-
+@app.route('/dashboard', methods=['GET'])
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return jsonify( SUCCESS_MESSAGE['LoggedOut'] )
+    return redirect(url_for('login'))
 
 @app.route('/category', methods=['POST'])
 @login_required

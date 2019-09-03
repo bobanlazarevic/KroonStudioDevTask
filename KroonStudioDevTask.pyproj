@@ -28,6 +28,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+    <Compile Include="blog\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="blog\models.py">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="templates\dashboard.html" />
+    <Content Include="templates\layout.html" />
+    <Content Include="templates\login.html" />
+    <Content Include="templates\register.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="blog\" />
+    <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
@@ -51,9 +62,6 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X86</Architecture>
     </Interpreter>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="blog\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 
