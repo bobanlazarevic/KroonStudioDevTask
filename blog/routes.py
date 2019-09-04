@@ -71,7 +71,7 @@ def add_category():
 
     if request.method == 'POST':
         category = Category.query.filter_by(title = form.title.data).first()
-        if not category and form.validate():
+        if not category and form.validate_on_submit():
             new_category = Category(title = form.title.data)
             db.session.add(new_category)
             db.session.commit()
@@ -85,30 +85,27 @@ def add_category():
 @app.route('/createarticle', methods=['GET', 'POST'])
 @login_required
 def create_article():
-    #new_article = Article(title = 'test', content = 'test', owner_id = 1, category_id = 1)
-    #db.session.add(new_article)
-    #db.session.commit()
 
-    return redirect(url_for('dashboard'))
-    #form = CreateArticleForm()
+    form = CreateArticleForm()
 
-    #form.categories.choices = [(c.id, c.title) for c in Category.query.order_by('title')]
+    form.categories.choices = [(c.id, c.title) for c in Category.query.order_by(Category.id.asc()).all()]
 
-    #if request.method == 'POST' and form.validate():
-    #    #cat_id = int(form.categories.data[0])
-        
-    #    titles = Article.query.filter(and_(Article.category_id == 1, Article.title == form.title.data)).first()
-        
-    #    if not titles:
-    #        new_article = Article(title = form.title.data, content = form.content.data, owner_id = 1, category_id = 1)
-    #        db.session.add(new_article)
-    #        db.session.commit()
+    if request.method == 'POST':
+        index = int( form.categories.data )
+        category_id = form.categories.choices[index - 1][0]
 
-    #        return redirect(url_for('dashboard'))
-    #    else:
-    #        return redirect(url_for('create_article'))
+        titles = Article.query.filter(and_(Article.category_id == category_id, Article.title == str(form.title.data))).first()
 
-    #return render_template('createarticle.html', title = 'Create article', form = form)
+        if not titles and form.validate_on_submit():
+            new_article = Article(title = str(form.title.data), content = str(form.content.data), owner_id = current_user.id, category_id = category_id)
+            db.session.add(new_article)
+            db.session.commit()
+            
+            return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('create_article'))
+
+    return render_template('createarticle.html', title = 'Create article', form = form)
 
 @app.route('/article', methods=['GET'])
 @login_required
