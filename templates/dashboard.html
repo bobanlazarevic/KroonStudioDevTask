@@ -4,6 +4,13 @@
     <div class="pure-menu pure-menu-horizontal">
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="{{ url_for('logout') }}" class="pure-menu-link">Logout</a></li>
+            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                <a href="#" id="menuLink1" class="pure-menu-link">Create</a>
+                <ul class="pure-menu-children">
+                    <li class="pure-menu-item"><a href="{{ url_for('create_article') }}" class="pure-menu-link">Article</a></li>
+                    <li class="pure-menu-item"><a href="{{ url_for('add_category') }}" class="pure-menu-link">Category</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
 

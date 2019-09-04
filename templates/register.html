@@ -1,39 +1,45 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-<div class="center">
-    <form action="{{ url_for('register_user') }}" method="POST" class="pure-form pure-form-stacked">
-        {{ form.hidden_tag() }}
-        <fieldset>
-            <div class="pure-g">
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <label for="First name">First name</label>
-                    {{ form.first_name(class="pure-u-23-24") }}
-                </div>
+    <div class="pure-menu pure-menu-horizontal">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="{{ url_for('login') }}" class="pure-menu-link">Log in</a></li>
+        </ul>
+    </div>
 
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <label for="Last name">Last name</label>
-                    {{ form.last_name(class="pure-u-23-24") }}
-                </div>
+    <div class="center">
+        <form action="{{ url_for('register_user') }}" method="POST" class="pure-form pure-form-stacked">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <div class="pure-g">
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <label>First name</label>
+                        {{ form.first_name(class="pure-u-23-24") }}
+                    </div>
 
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <label for="email">Email</label>
-                    {{ form.email(class="pure-u-23-24") }}
-                </div>
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <label>Last name</label>
+                        {{ form.last_name(class="pure-u-23-24") }}
+                    </div>
 
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <label for="password">Password</label>
-                    {{ form.password(class="pure-u-23-24") }}
-                </div>
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <label>Email</label>
+                        {{ form.email(class="pure-u-23-24") }}
+                    </div>
 
-                <div class="pure-u-1 pure-u-md-1-3">
-                    <label for="password2">Confirm password</label>
-                    {{ form.confirm_password(class="pure-u-23-24") }}
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <label>Password</label>
+                        {{ form.password(class="pure-u-23-24") }}
+                    </div>
+
+                    <div class="pure-u-1 pure-u-md-1-3">
+                        <label>Confirm password</label>
+                        {{ form.confirm_password(class="pure-u-23-24") }}
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="pure-button pure-button-primary">Sign up</button>
-        </fieldset>
-    </form>
-</div>
+                <button type="submit" class="pure-button pure-button-primary">Register</button>
+            </fieldset>
+        </form>
+    </div>
 
 {% endblock content %}

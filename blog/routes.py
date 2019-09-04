@@ -4,40 +4,9 @@ from flask import Flask, render_template, url_for, flash, redirect, request, jso
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from blog.forms import LoginForm, RegistrationForm
+from blog.forms import LoginForm, RegistrationForm, CreateArticleForm, CreateCategoryForm
 from blog.models import User, Category, Article
 from blog import app, db
-
-import uuid
-import re
-
-# This is just for testing purposes
-SUCCESS_MESSAGE = {
-    'NewUser': { 'Success': 'New user created!', 'Code': 200 },
-    'LoggedIn': { 'Success': 'Logged in', 'Code': 200 },
-    'CategoryCreated': { 'Success': 'Successfully created a new category', 'Code': 200 },
-    'ArticleCreated': { 'Success': 'Successfully created a new article', 'Code': 200 },
-    'ArticleDeleted': { 'Success': 'Successfully deleted the article', 'Code': 200 },
-    'LoggedOut': { 'Success': 'Successfully logged out', 'Code': 200 }
-}
-
-ERROR_MESSAGE = {
-    'IncorrectEmail': { 'Error': 'That email address is already in use!', 'Code': 401 },
-    'IncorrectPassword': { 'Error': 'Minimum length 8 characters, must contain at least one capitalized letter at least one number digit and at least one symbol!', 'Code': 401},
-    'Unauthorized': { 'Error' : 'Incorrect password or email address entered. Please try again!', 'Code': 401 },
-    'TokenMissing': { 'Error' : 'Token is missing!', 'Code': 401 },
-    'TokenInvalid': { 'Error' : 'Token is invalid!', 'Code': 401 },
-    'CategoryExists': { 'Error': 'Category already exists!', 'Code': 409 },
-    'CategoryNotFound': { 'Error': 'Category not found!', 'Code': 404 },
-    'TitleNotUnique': { 'Error': 'Article with this title already exists!', 'Code': 403 },
-    'ArticleNotFound': { 'Error': 'Article not found!', 'Code': 404 },
-    'DummyLogin': { 'Error': 'DummyLogin!', 'Code': 404 },
-}
-
-# This is just for testing purposes
-@app.route('/dummy')
-def dummy():
-    return jsonify( ERROR_MESSAGE['DummyLogin'] )
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -65,6 +34,7 @@ def register_user():
 
     return render_template('register.html', title = 'Sign up', form = form)
 
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -93,54 +63,52 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/category', methods=['POST'])
+@app.route('/category', methods=['GET', 'POST'])
 @login_required
 def add_category():
-    data = request.get_json()
 
-    category = Category.query.filter_by(title = data['title']).first()
+    form = CreateCategoryForm()
 
-    if category:
-        return jsonify( ERROR_MESSAGE['CategoryExists'] )
+    if request.method == 'POST':
+        category = Category.query.filter_by(title = form.title.data).first()
+        if not category and form.validate():
+            new_category = Category(title = form.title.data)
+            db.session.add(new_category)
+            db.session.commit()
+            
+            return redirect(url_for('dashboard'))
+        else:
+            return redirect(url_for('add_category')) 
 
-    new_category = Category(title = data['title'])
-    db.session.add(new_category)
-    db.session.commit()
+    return render_template('createcategory.html', title = 'Add category', form = form)
 
-    return jsonify( SUCCESS_MESSAGE['CategoryCreated'] )
-
-@app.route('/category', methods=['GET'])
-@login_required
-def get_all_categories():
-    categories = Category.query.all()
-
-    output = []
-
-    for category in categories:
-        category_data = {}
-        category_data['title'] = category.title
-        output.append(category_data)
-
-    return jsonify({'Categories' : output})
-
-@app.route('/article', methods=['POST'])
+@app.route('/createarticle', methods=['GET', 'POST'])
 @login_required
 def create_article():
-    data = request.get_json()
+    #new_article = Article(title = 'test', content = 'test', owner_id = 1, category_id = 1)
+    #db.session.add(new_article)
+    #db.session.commit()
 
-    category = Category.query.filter_by(title = data['category']).first()
-    if not category:
-        return jsonify( ERROR_MESSAGE['CategoryNotFound'] )
+    return redirect(url_for('dashboard'))
+    #form = CreateArticleForm()
 
-    titles = Article.query.filter(and_(Article.category_id == category.id, Article.title == data['title'])).all()
-    if titles:
-        return jsonify( ERROR_MESSAGE['TitleNotUnique'] )
+    #form.categories.choices = [(c.id, c.title) for c in Category.query.order_by('title')]
 
-    new_article = Article(title = data['title'], content = data['content'], owner_id = current_user.id, category_id = category.id)
-    db.session.add(new_article)
-    db.session.commit()
+    #if request.method == 'POST' and form.validate():
+    #    #cat_id = int(form.categories.data[0])
+        
+    #    titles = Article.query.filter(and_(Article.category_id == 1, Article.title == form.title.data)).first()
+        
+    #    if not titles:
+    #        new_article = Article(title = form.title.data, content = form.content.data, owner_id = 1, category_id = 1)
+    #        db.session.add(new_article)
+    #        db.session.commit()
 
-    return jsonify( SUCCESS_MESSAGE['ArticleCreated'] )
+    #        return redirect(url_for('dashboard'))
+    #    else:
+    #        return redirect(url_for('create_article'))
+
+    #return render_template('createarticle.html', title = 'Create article', form = form)
 
 @app.route('/article', methods=['GET'])
 @login_required

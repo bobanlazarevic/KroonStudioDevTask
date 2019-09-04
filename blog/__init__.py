@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 db = SQLAlchemy(app)
 
 login = LoginManager(app)
-login.login_view = 'dummy'
+login.login_view = 'login'
 
 from .models import User
 
