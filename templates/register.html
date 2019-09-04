@@ -1,11 +1,10 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-    <div class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="{{ url_for('login') }}" class="pure-menu-link">Log in</a></li>
-        </ul>
-    </div>
+    <ul>
+        <li><a href="{{ url_for('login') }}">Log in</a></li>
+    </ul>
+
 
     <div class="center">
         <form action="{{ url_for('register_user') }}" method="POST" class="pure-form pure-form-stacked">

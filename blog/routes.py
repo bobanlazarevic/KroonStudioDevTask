@@ -55,7 +55,23 @@ def login():
 @app.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+
+    articles = Article.query.order_by(Article.updated_at.desc()).all()
+
+    output = []
+
+    for article in articles:
+        article_data = {}
+        article_data['title'] = article.title
+        article_data['content'] = article.content
+        article_data['category'] = article.category.title
+        article_data['first_name'] = article.owner.first_name
+        article_data['last_name'] = article.owner.first_name
+        article_data['created_at'] = article.created_at
+        article_data['updated_at'] = article.updated_at
+        output.append(article_data)
+
+    return render_template('dashboard.html', posts = output)
 
 @app.route('/logout')
 @login_required
@@ -106,26 +122,6 @@ def create_article():
             return redirect(url_for('create_article'))
 
     return render_template('createarticle.html', title = 'Create article', form = form)
-
-@app.route('/article', methods=['GET'])
-@login_required
-def get_all_articles():
-    articles = Article.query.all()
-
-    output = []
-
-    for article in articles:
-        article_data = {}
-        article_data['title'] = article.title
-        article_data['content'] = article.content
-        article_data['category'] = article.category.title
-        article_data['first_name'] = article.owner.first_name
-        article_data['last_name'] = article.owner.first_name
-        article_data['created_at'] = article.created_at
-        article_data['updated_at'] = article.updated_at
-        output.append(article_data)
-
-    return jsonify({'Articles' : output})
 
 @app.route('/article/<article_id>', methods=['DELETE'])
 @login_required

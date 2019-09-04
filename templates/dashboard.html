@@ -1,17 +1,44 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-    <div class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="{{ url_for('logout') }}" class="pure-menu-link">Logout</a></li>
-            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                <a href="#" id="menuLink1" class="pure-menu-link">Create</a>
-                <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="{{ url_for('create_article') }}" class="pure-menu-link">Article</a></li>
-                    <li class="pure-menu-item"><a href="{{ url_for('add_category') }}" class="pure-menu-link">Category</a></li>
-                </ul>
-            </li>
-        </ul>
+<ul>
+    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    <li><a href="{{ url_for('add_category') }}">Category</a></li>
+    <li><a href="{{ url_for('create_article') }}">Article</a></li>
+</ul>
+
+<div class="center">
+    <form class="pure-form">
+        <input type="text" class="pure-input-rounded">
+        <button type="submit" class="pure-button">Search</button>
+    </form>
+</div>
+    <div id="layout" class="pure-g">
+        <div class="content pure-u-1 pure-u-md-3-4">
+            {% for post in posts %}
+            <div class="posts">
+                <h1 class="content-subhead">{{ post['updated_at'].strftime("%Y-%m-%d %H:%M:%S") }}</h1>
+
+                <section class="post">
+                    <header class="post-header">
+
+                        <h2 class="post-title">{{ post['title'] }}</h2>
+
+                        <p class="post-meta">
+                            By <a href="#" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        <p>
+                            {{ post['content'] }}
+                        </p>
+                    </div>
+                    <button type="submit" class="pure-button pure-button-primary">Delete</button>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
-{% endblock content %}
+    {% endblock content %}

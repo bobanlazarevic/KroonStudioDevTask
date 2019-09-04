@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="static\posts.css" />
+    <Content Include="static\mymenu.css" />
     <Content Include="templates\createarticle.html" />
     <Content Include="templates\createcategory.html" />
     <Content Include="templates\dashboard.html" />
@@ -52,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="blog\" />
+    <Folder Include="static\" />
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
