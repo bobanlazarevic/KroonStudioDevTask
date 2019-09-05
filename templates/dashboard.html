@@ -21,7 +21,7 @@
         <div class="posts">
             <section class="post">
                 <header class="post-header">
-                    <h1 class="post-title"><a href="{{ url_for('single_article', user_id = post['article_id']) }}">{{ post['title'] }}</a></h1>
+                    <h1 class="post-title"><a href="{{ url_for('single_article', article_id = post['article_id']) }}">{{ post['title'] }}</a></h1>
                     <p class="post-meta">
                         By <a href="{{ url_for('user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
                     </p>
@@ -62,7 +62,7 @@
                         {{ res['content'] }}
                     </p>
                     <p class="post-meta">
-                        <a class="post-category post-category-design" href="{{ url_for('single_article', user_id = res['id']) }}">More details...</a>
+                        <a class="post-category post-category-design" href="{{ url_for('single_article', article_id = res['id']) }}">More details...</a>
                     </p>
                 </div>
 

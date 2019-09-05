@@ -30,7 +30,7 @@ class Article(db.Model):
     __searchable__ = ['title', 'content']
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(40), nullable=False) # unique=True
+    title = db.Column(db.String(40), nullable=False)
     content = db.Column(db.String(400), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now())

@@ -25,7 +25,9 @@
                 </div>
 
                 {% if post.user_id == current_user.id %}
-                    <button type="submit" href="#" class="pure-button pure-button-primary">Update</button>
+                <form method="GET" action="{{ url_for('update_article', article_id = post['article_id']) }}" class="pure-form pure-form-stacked">
+                    <button type="submit" class="pure-button pure-button-primary">Update</button>
+                </form>
                 {% endif %}
 
             </section>

@@ -60,9 +60,9 @@ def search():
 
     return render_template('dashboard.html', search_results = results)
 
-@app.route('/single/<int:user_id>')
-def single_article(user_id):
-    article = Article.query.get_or_404(user_id)
+@app.route('/single/<int:article_id>')
+def single_article(article_id):
+    article = Article.query.get_or_404(article_id)
 
     article_data = {}
     article_data['article_id'] = article.id
@@ -193,25 +193,29 @@ def delete_article(article_id):
 
     return redirect(url_for('dashboard'))
 
-@app.route('/article/<article_id>', methods=['put'])
+@app.route('/article/update/<article_id>', methods=['GET', 'POST'])
 @login_required
 def update_article(article_id):
-    data = request.get_json()
+    article = Article.query.get_or_404(article_id)
+    
+    form = CreateArticleForm()
+    form.categories.choices = [(c.id, c.title) for c in Category.query.order_by(Category.id.asc()).all()]
 
-    article = Article.query.filter_by(id = article_id, owner_id = current_user.id).first()
+    if article and request.method == 'GET':
+        form.title.data = article.title
+        form.content.data = article.content
 
-    if not article:
-        return jsonify( error_message['articlenotfound'] )
+    if article and request.method == 'POST' and form.validate_on_submit():
+        index = int( form.categories.data )
+        category_id = form.categories.choices[index - 1][0]
 
-    category = Category.query.filter_by(title = data['category']).first()
-    if not category:
-        return jsonify( error_message['categorynotfound'] )
+        article.title = str(form.title.data)
+        article.content = str(form.content.data)
+        article.category_id = category_id
+        article.updated_at = datetime.now()
 
-    article.title = data['title']
-    article.content = data['content']
-    article.category_id = category.id;
-    article.updated_at = datetime.now()
+        db.session.commit()
 
-    db.session.commit()
+        return redirect(url_for('single_article', article_id = article_id))
 
-    return jsonify( SUCCESS_MESSAGE['articleupdated'] )
+    return render_template('updatearticle.html', id = { 'article': article_id }, form = form)

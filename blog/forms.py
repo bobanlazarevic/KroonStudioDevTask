@@ -32,8 +32,8 @@ class LoginForm(FlaskForm):
 
 class CreateArticleForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', [DataRequired(), Length(min=2, max=400)])
-    categories = SelectField('Categories', coerce=int)
+    content = TextAreaField('Content', validators= [DataRequired(), Length(min=2, max=400)])
+    categories = SelectField('Categories', coerce=int, validators = [DataRequired()])
 
 class CreateCategoryForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=2, max=40)])
