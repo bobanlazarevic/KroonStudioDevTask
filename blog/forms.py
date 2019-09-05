@@ -32,7 +32,7 @@ class LoginForm(FlaskForm):
 
 class CreateArticleForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', [DataRequired(), Length(min=2, max=200)])
+    content = TextAreaField('Content', [DataRequired(), Length(min=2, max=400)])
     categories = SelectField('Categories', coerce=int)
 
 class CreateCategoryForm(FlaskForm):

@@ -1,46 +1,77 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-    <ul>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
-        <li><a href="{{ url_for('add_category') }}">Category</a></li>
-        <li><a href="{{ url_for('create_article') }}">Article</a></li>
-    </ul>
+<ul>
+    <li><a href="{{ url_for('logout') }}">Logout ({{ session['active_user'] }})</a></li>
+    <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+    <li><a href="{{ url_for('add_category') }}">Category</a></li>
+    <li><a href="{{ url_for('create_article') }}">Article</a></li>
+</ul>
 
-    <div class="center">
-        <form class="pure-form" method="GET" action="search">
-            <input type="text" class="pure-input-rounded" name="query">
-            <button type="submit" class="pure-button">Search</button>
-        </form>
-    </div>
+<div class="center">
+    <form class="pure-form" method="GET" action="search">
+        <input type="text" class="pure-input-rounded" name="query">
+        <button type="submit" class="pure-button">Search</button>
+    </form>
+</div>
 
-    <div id="layout" class="pure-g">
-        <div class="content pure-u-1 pure-u-md-3-4">
-            {% for post in posts %}
-            <div class="posts">
+<div id="layout" class="pure-g">
+    <div class="content pure-u-1 pure-u-md-3-4">
+        {% for post in posts %}
+        <div class="posts">
+            <section class="post">
+                <header class="post-header">
+                    <h1 class="post-title"><a href="{{ url_for('single_article', user_id = post['article_id']) }}">{{ post['title'] }}</a></h1>
+                    <p class="post-meta">
+                        By <a href="{{ url_for('user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
+                    </p>
+                </header>
+
                 <h1 class="content-subhead">{{ post['updated_at'].strftime("%Y-%m-%d %H:%M:%S") }}</h1>
 
-                <section class="post">
-                    <header class="post-header">
+                <div class="post-description">
+                    <p>
+                        {{ post['content'] }}
+                    </p>
+                </div>
 
-                        <h2 class="post-title">{{ post['title'] }}</h2>
-
-                        <p class="post-meta">
-                            By <a href="#" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        <p>
-                            {{ post['content'] }}
-                        </p>
-                    </div>
+                {% if post.user_id == current_user.id %}
+                <form method="POST" action="{{ url_for('delete_article', article_id = post['article_id']) }}" class="pure-form pure-form-stacked">
                     <button type="submit" class="pure-button pure-button-primary">Delete</button>
-                </section>
-            </div>
-            {% endfor %}
+                </form>
+                {% endif %}
+            </section>
         </div>
+        {% endfor %}
     </div>
+</div>
 
-    {% endblock content %}
+<div id="layout" class="pure-g">
+    <div class="content pure-u-1 pure-u-md-3-4">
+        {% for res in search_results %}
+        <div class="posts">
+            <section class="post">
+                <h1 class="content-subhead"></h1>
+
+                <header class="post-header">
+                    <h2 class="post-title">{{ res['title'] }}</h2>
+                </header>
+
+                <div class="post-description">
+                    <p>
+                        {{ res['content'] }}
+                    </p>
+                    <p class="post-meta">
+                        <a class="post-category post-category-design" href="{{ url_for('single_article', user_id = res['id']) }}">More details...</a>
+                    </p>
+                </div>
+
+                <h1 class="content-subhead"></h1>
+            </section>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}

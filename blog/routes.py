@@ -1,6 +1,6 @@
 from sqlalchemy import and_
 from datetime import datetime
-from flask import Flask, render_template, url_for, flash, redirect, request, jsonify
+from flask import Flask, render_template, url_for, flash, redirect, request, session, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -46,6 +46,7 @@ def login():
         user = User.query.filter_by(email = form.email.data).first()
         if user: # form.validate() and user and check_password_hash(user.password, form.password.data):
             login_user(user)
+            session['active_user'] = user.first_name + ' ' + user.last_name
             return redirect(url_for('dashboard'))
         else:
             return redirect(url_for('login')) 
@@ -57,7 +58,46 @@ def search():
     keyword = request.args.get('query')
     results = Article.query.msearch(keyword, fields=['title', 'content'], limit=10)
 
-    return render_template('dashboard.html', links = results)
+    return render_template('dashboard.html', search_results = results)
+
+@app.route('/single/<int:user_id>')
+def single_article(user_id):
+    article = Article.query.get_or_404(user_id)
+
+    article_data = {}
+    article_data['article_id'] = article.id
+    article_data['user_id'] = article.owner.id
+    article_data['title'] = article.title
+    article_data['content'] = article.content
+    article_data['category'] = article.category.title
+    article_data['first_name'] = article.owner.first_name
+    article_data['last_name'] = article.owner.first_name
+    article_data['created_at'] = article.created_at
+    article_data['updated_at'] = article.updated_at
+
+    return render_template('single.html', post = article_data)
+
+@app.route('/userarticles/<int:user_id>')
+@login_required
+def user_articles(user_id):
+    articles = Article.query.filter_by(owner_id = user_id).all()
+
+    output = []
+
+    for article in articles:
+        article_data = {}
+        article_data['article_id'] = article.id
+        article_data['user_id'] = article.owner.id
+        article_data['title'] = article.title
+        article_data['content'] = article.content
+        article_data['category'] = article.category.title
+        article_data['first_name'] = article.owner.first_name
+        article_data['last_name'] = article.owner.first_name
+        article_data['created_at'] = article.created_at
+        article_data['updated_at'] = article.updated_at
+        output.append(article_data)
+
+    return render_template('userarticles.html', posts = output)
 
 @app.route('/dashboard', methods=['GET'])
 @login_required
@@ -69,6 +109,8 @@ def dashboard():
 
     for article in articles:
         article_data = {}
+        article_data['article_id'] = article.id
+        article_data['user_id'] = article.owner.id
         article_data['title'] = article.title
         article_data['content'] = article.content
         article_data['category'] = article.category.title
@@ -84,6 +126,9 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
+
+    session['active_user'] = ''
+
     return redirect(url_for('login'))
 
 @app.route('/category', methods=['GET', 'POST'])
@@ -120,7 +165,14 @@ def create_article():
         titles = Article.query.filter(and_(Article.category_id == category_id, Article.title == str(form.title.data))).first()
 
         if not titles and form.validate_on_submit():
-            new_article = Article(title = str(form.title.data), content = str(form.content.data), owner_id = current_user.id, category_id = category_id)
+            new_article = Article(
+                title = str(form.title.data), 
+                content = str(form.content.data), 
+                owner_id = current_user.id, 
+                category_id = category_id,
+                created_at = datetime.now(),
+                updated_at = datetime.now()
+            )
             db.session.add(new_article)
             db.session.commit()
             
@@ -130,18 +182,16 @@ def create_article():
 
     return render_template('createarticle.html', title = 'Create article', form = form)
 
-@app.route('/article/<article_id>', methods=['DELETE'])
+@app.route('/deletearticle/<int:article_id>', methods=['POST'])
 @login_required
 def delete_article(article_id):
     article = Article.query.filter_by(id = article_id, owner_id = current_user.id).first()
 
-    if not article:
-        return jsonify( ERROR_MESSAGE['ArticleNotFound'] )
+    if article:
+        db.session.delete(article)
+        db.session.commit()
 
-    db.session.delete(article)
-    db.session.commit()
-
-    return jsonify( SUCCESS_MESSAGE['ArticleDeleted'] )
+    return redirect(url_for('dashboard'))
 
 @app.route('/article/<article_id>', methods=['put'])
 @login_required
