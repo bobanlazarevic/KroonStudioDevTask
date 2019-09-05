@@ -1,18 +1,20 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-<ul>
-    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-    <li><a href="{{ url_for('add_category') }}">Category</a></li>
-    <li><a href="{{ url_for('create_article') }}">Article</a></li>
-</ul>
+    <ul>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('add_category') }}">Category</a></li>
+        <li><a href="{{ url_for('create_article') }}">Article</a></li>
+    </ul>
 
-<div class="center">
-    <form class="pure-form">
-        <input type="text" class="pure-input-rounded">
-        <button type="submit" class="pure-button">Search</button>
-    </form>
-</div>
+    <div class="center">
+        <form class="pure-form" method="GET" action="search">
+            <input type="text" class="pure-input-rounded" name="query">
+            <button type="submit" class="pure-button">Search</button>
+        </form>
+    </div>
+
     <div id="layout" class="pure-g">
         <div class="content pure-u-1 pure-u-md-3-4">
             {% for post in posts %}

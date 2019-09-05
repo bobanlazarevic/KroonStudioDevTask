@@ -26,6 +26,9 @@ class Category(db.Model):
         return f"Category('{self.title}')"
 
 class Article(db.Model):
+    __tablename__ = 'article'
+    __searchable__ = ['title', 'content']
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False) # unique=True
     content = db.Column(db.String(300), nullable=False)

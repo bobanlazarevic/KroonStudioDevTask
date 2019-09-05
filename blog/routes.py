@@ -52,6 +52,13 @@ def login():
 
     return render_template('login.html', title = 'Login', form = form)
 
+@app.route('/search', methods=['GET'])
+def search():
+    keyword = request.args.get('query')
+    results = Article.query.msearch(keyword, fields=['title', 'content'], limit=10)
+
+    return render_template('dashboard.html', links = results)
+
 @app.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
