@@ -8,7 +8,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(80), unique=True, nullable=False)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(80), nullable=False) # 64
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     articles = db.relationship('Article', backref='owner')
@@ -31,7 +31,7 @@ class Article(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(40), nullable=False)
-    content = db.Column(db.String(400), nullable=False)
+    content = db.Column(db.Text(), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 

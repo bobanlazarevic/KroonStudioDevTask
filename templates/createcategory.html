@@ -1,23 +1,31 @@
 ﻿{% extends "layout.html" %}
 {% block content %}
 
-    <ul>
-        <li><a href="{{ url_for('dashboard') }}">Back</a></li>
-    </ul>
+<ul>
+    <li><a href="{{ url_for('dashboard_bp.dashboard') }}">Back</a></li>
+</ul>
 
-    <div class="center">
-        <form action="{{ url_for('add_category') }}" method="POST" class="pure-form pure-form-stacked">
-            {{ form.hidden_tag() }}
-            <fieldset>
-                <div class="pure-g">
-                    <div class="pure-u-1 pure-u-md-1-3">
-                        <label>Title</label>
-                        {{ form.title(class="pure-u-23-24") }}
-                    </div>
+<div class="center">
+    <form action="{{ url_for('categories_bp.add_category_post') }}" method="POST" class="pure-form pure-form-stacked">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <label>Category</label>
+                    {{ form.title(class="pure-u-23-24") }}
                 </div>
-                <button type="submit" class="pure-button pure-button-primary">Create</button>
-            </fieldset>
-        </form>
-    </div>
+            </div>
+            <button type="submit" class="pure-button pure-button-primary">Create</button>
+        </fieldset>
+    </form>
+</div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="error-message">
+    <span class="error-text">{{ messages[0] }}</span>
+</div>
+{% endif %}
+{% endwith %}
 
 {% endblock content %}

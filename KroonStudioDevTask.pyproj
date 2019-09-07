@@ -28,13 +28,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
-    <Compile Include="blog\forms.py">
+    <Compile Include="blog\articles\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\articles\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\articles\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\categories\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\categories\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\categories\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\dashboard\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\dashboard\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\errors\handlers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\errors\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="blog\models.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="blog\routes.py">
+    <Compile Include="blog\users\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\users\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\users\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="blog\__init__.py">
@@ -48,16 +81,26 @@
     <Content Include="templates\createarticle.html" />
     <Content Include="templates\createcategory.html" />
     <Content Include="templates\dashboard.html" />
+    <Content Include="templates\errors\404.html" />
+    <Content Include="templates\errors\405.html" />
+    <Content Include="templates\errors\500.html" />
     <Content Include="templates\layout.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\register.html" />
     <Content Include="templates\single.html" />
+    <Content Include="templates\updatearticle.html" />
     <Content Include="templates\userarticles.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="blog\" />
+    <Folder Include="blog\articles\" />
+    <Folder Include="blog\dashboard\" />
+    <Folder Include="blog\categories\" />
+    <Folder Include="blog\errors\" />
+    <Folder Include="blog\users\" />
     <Folder Include="static\" />
     <Folder Include="templates\" />
+    <Folder Include="templates\errors\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">

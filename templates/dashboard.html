@@ -2,13 +2,13 @@
 {% block content %}
 
 <ul>
-    <li><a href="{{ url_for('logout') }}">Logout ({{ session['active_user'] }})</a></li>
-    <li><a href="{{ url_for('dashboard') }}">Home</a></li>
-    <li><a href="{{ url_for('add_category') }}">Category</a></li>
-    <li><a href="{{ url_for('create_article') }}">Article</a></li>
+    <li><a href="{{ url_for('users_bp.logout') }}">Logout ({{ current_user.first_name + ' ' + current_user.last_name }})</a></li>
+    <li><a href="{{ url_for('dashboard_bp.dashboard') }}">Home</a></li>
+    <li><a href="{{ url_for('categories_bp.add_category') }}">Category</a></li>
+    <li><a href="{{ url_for('articles_bp.create_article') }}">Article</a></li>
 </ul>
 
-<div class="center">
+<div class="searchbtn">
     <form class="pure-form" method="GET" action="search">
         <input type="text" class="pure-input-rounded" name="query">
         <button type="submit" class="pure-button">Search</button>
@@ -21,9 +21,9 @@
         <div class="posts">
             <section class="post">
                 <header class="post-header">
-                    <h1 class="post-title"><a href="{{ url_for('single_article', article_id = post['article_id']) }}">{{ post['title'] }}</a></h1>
+                    <p class="post-title"><a href="{{ url_for('dashboard_bp.single_article', article_id = post['article_id']) }}">{{ post['title'] }}</a></p>
                     <p class="post-meta">
-                        By <a href="{{ url_for('user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
+                        By <a href="{{ url_for('dashboard_bp.user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
                     </p>
                 </header>
 
@@ -36,7 +36,7 @@
                 </div>
 
                 {% if post.user_id == current_user.id %}
-                <form method="POST" action="{{ url_for('delete_article', article_id = post['article_id']) }}" class="pure-form pure-form-stacked">
+                <form method="POST" action="{{ url_for('articles_bp.delete_article', article_id = post['article_id']) }}" class="pure-form pure-form-stacked">
                     <button type="submit" class="pure-button pure-button-primary">Delete</button>
                 </form>
                 {% endif %}
@@ -62,7 +62,7 @@
                         {{ res['content'] }}
                     </p>
                     <p class="post-meta">
-                        <a class="post-category post-category-design" href="{{ url_for('single_article', article_id = res['id']) }}">More details...</a>
+                        <a class="post-category post-category-design" href="{{ url_for('dashboard_bp.single_article', article_id = res['id']) }}">More details...</a>
                     </p>
                 </div>
 

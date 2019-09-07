@@ -2,11 +2,11 @@
 {% block content %}
 
 <ul>
-    <li><a href="{{ url_for('dashboard') }}">Back</a></li>
+    <li><a href="{{ url_for('dashboard_bp.dashboard') }}">Back</a></li>
 </ul>
 
 <div class="center">
-    <form action="{{ url_for('update_article', article_id = id['article']) }}" method="POST" class="pure-form pure-form-stacked">
+    <form action="" method="POST" class="pure-form pure-form-stacked">
         {{ form.hidden_tag() }}
         <fieldset>
             <div class="pure-g">
