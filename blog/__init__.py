@@ -3,16 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 from flask_msearch import Search
+from flask_mail import Mail
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
-
-app.config['SECRET_KEY'] = 'ovojetajnasifra'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app = Flask(__name__, template_folder='../templates', static_folder='../static', instance_relative_config=True)
+app.config.from_pyfile('flask.cfg')
 
 db = SQLAlchemy(app)
 
 search = Search(db = db)
 search.init_app(app)
+mail = Mail(app)
 
 login = LoginManager(app)
 login.login_view = 'users_bp.login'

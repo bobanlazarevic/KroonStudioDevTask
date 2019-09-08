@@ -52,12 +52,6 @@
     <Compile Include="blog\dashboard\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="blog\errors\handlers.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="blog\errors\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="blog\models.py">
       <SubType>Code</SubType>
     </Compile>
@@ -75,18 +69,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="instance\flask.cfg" />
     <Content Include="requirements.txt" />
     <Content Include="static\posts.css" />
-    <Content Include="static\mymenu.css" />
+    <Content Include="static\mycss.css" />
     <Content Include="templates\createarticle.html" />
     <Content Include="templates\createcategory.html" />
     <Content Include="templates\dashboard.html" />
+    <Content Include="templates\email_confirmation.html" />
     <Content Include="templates\errors\404.html" />
     <Content Include="templates\errors\405.html" />
     <Content Include="templates\errors\500.html" />
     <Content Include="templates\layout.html" />
     <Content Include="templates\login.html" />
+    <Content Include="templates\email_password_reset.html" />
     <Content Include="templates\register.html" />
+    <Content Include="templates\reset_password.html" />
+    <Content Include="templates\reset_request.html" />
     <Content Include="templates\single.html" />
     <Content Include="templates\updatearticle.html" />
     <Content Include="templates\userarticles.html" />
@@ -96,8 +95,8 @@
     <Folder Include="blog\articles\" />
     <Folder Include="blog\dashboard\" />
     <Folder Include="blog\categories\" />
-    <Folder Include="blog\errors\" />
     <Folder Include="blog\users\" />
+    <Folder Include="instance\" />
     <Folder Include="static\" />
     <Folder Include="templates\" />
     <Folder Include="templates\errors\" />

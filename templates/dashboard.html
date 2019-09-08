@@ -23,7 +23,7 @@
                 <header class="post-header">
                     <p class="post-title"><a href="{{ url_for('dashboard_bp.single_article', article_id = post['article_id']) }}">{{ post['title'] }}</a></p>
                     <p class="post-meta">
-                        By <a href="{{ url_for('dashboard_bp.user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design" href="#">{{ post['category'] }}</a>
+                        By <a href="{{ url_for('dashboard_bp.user_articles', user_id = post['user_id']) }}" class="post-author">{{ post['first_name'] }} {{ post['last_name'] }}</a> under <a class="post-category post-category-design disablelinks" href="#">{{ post['category'] }}</a>
                     </p>
                 </header>
 

@@ -6,3 +6,4 @@ Flask-Script
 flask-login
 flask-wtf
 flask-msearch
+flask-mail

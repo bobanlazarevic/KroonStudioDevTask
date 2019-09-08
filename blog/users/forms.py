@@ -17,7 +17,7 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('password')])
 
     def validate_email(self, email):
-        user = User.query.filter_by(email = email.data).first()
+        user = User.query.filter_by(email = email.data.lower()).first()
         if user:
             raise ValidationError('That email is taken!')
 
@@ -28,3 +28,16 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    
+    def validate_password(self, password):
+        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password.data):
+            raise ValidationError('Minimum length 8 characters, must contain at least one capitalized letter at least one number digit and at least one symbol!')
