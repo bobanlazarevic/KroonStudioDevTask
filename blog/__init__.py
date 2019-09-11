@@ -27,11 +27,14 @@ from blog.users.routes import users_bp
 from blog.articles.routes import articles_bp
 from blog.dashboard.routes import dashboard_bp
 from blog.categories.routes import categories_bp
+from blog.endpoint_api.api import api_bp
 
 app.register_blueprint(users_bp)
 app.register_blueprint(articles_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(categories_bp)
+app.register_blueprint(categories_bp)
+app.register_blueprint(api_bp)
 
 @app.errorhandler(404)
 def error_404(error):

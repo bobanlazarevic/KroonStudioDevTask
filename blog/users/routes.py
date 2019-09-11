@@ -32,6 +32,7 @@ def register_user_post():
             email = request.form.get('email').lower(),
             first_name = request.form.get('first_name').lower(),
             last_name = request.form.get('last_name').lower(),
+            created_at = datetime.now(),
             password = hashed_password
         )
         db.session.add(new_user)

@@ -52,6 +52,12 @@
     <Compile Include="blog\dashboard\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="blog\endpoint_api\api.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="blog\endpoint_api\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="blog\models.py">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +101,7 @@
     <Folder Include="blog\articles\" />
     <Folder Include="blog\dashboard\" />
     <Folder Include="blog\categories\" />
+    <Folder Include="blog\endpoint_api\" />
     <Folder Include="blog\users\" />
     <Folder Include="instance\" />
     <Folder Include="static\" />
@@ -105,11 +112,11 @@
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>3.7</Version>
-      <Description>env (Python 3.7 (64-bit))</Description>
+      <Description>env (Python 3.7 (32-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
+      <Architecture>X86</Architecture>
     </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
